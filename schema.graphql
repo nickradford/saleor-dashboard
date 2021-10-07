@@ -70,6 +70,7 @@ enum AccountErrorCode {
   JWT_INVALID_CSRF_TOKEN
   CHANNEL_INACTIVE
   MISSING_CHANNEL_SLUG
+  ACCOUNT_NOT_CONFIRMED
 }
 
 input AccountInput {
@@ -2427,6 +2428,7 @@ input GiftCardFilterInput {
   currency: String
   currentBalance: PriceRangeInput
   initialBalance: PriceRangeInput
+  code: String
 }
 
 type GiftCardResend {
@@ -5862,6 +5864,7 @@ type Query {
   menuItems(channel: String, sortBy: MenuItemSortingInput, filter: MenuItemFilterInput, before: String, after: String, first: Int, last: Int): MenuItemCountableConnection
   giftCard(id: ID!): GiftCard
   giftCards(sortBy: GiftCardSortingInput, filter: GiftCardFilterInput, before: String, after: String, first: Int, last: Int): GiftCardCountableConnection
+  giftCardCurrencies: [String!]!
   plugin(id: ID!): Plugin
   plugins(filter: PluginFilterInput, sortBy: PluginSortingInput, before: String, after: String, first: Int, last: Int): PluginCountableConnection
   sale(id: ID!, channel: String): Sale
@@ -6899,6 +6902,7 @@ type Voucher implements Node & ObjectWithMetadata {
   categories(before: String, after: String, first: Int, last: Int): CategoryCountableConnection
   collections(before: String, after: String, first: Int, last: Int): CollectionCountableConnection
   products(before: String, after: String, first: Int, last: Int): ProductCountableConnection
+  variants(before: String, after: String, first: Int, last: Int): ProductVariantCountableConnection
   countries: [CountryDisplay]
   translation(languageCode: LanguageCodeEnum!): VoucherTranslation
   discountValue: Float
@@ -6990,6 +6994,7 @@ input VoucherInput {
   endDate: DateTime
   discountValueType: DiscountValueTypeEnum
   products: [ID]
+  variants: [ID]
   collections: [ID]
   categories: [ID]
   minCheckoutItemsQuantity: Int
