@@ -1,4 +1,5 @@
 import { Dialog, DialogContent, DialogTitle } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
 import { DialogProps } from "@saleor/types";
 import React from "react";
 
@@ -12,18 +13,51 @@ export interface ActionDialogProps extends DialogProps {
   confirmButtonState: ConfirmButtonTransitionState;
   disabled?: boolean;
   maxWidth?: Size | false;
+  restrictScroll?: boolean;
   title: string;
   variant?: ActionDialogVariant;
   onConfirm();
 }
 
+const useStyles = makeStyles(
+  () => ({
+    root: {
+      "& .MuiDialog-paper": {
+        overflow: "initial"
+      }
+    },
+    content: {
+      overflow: "initial"
+    }
+  }),
+  { name: "ActionDialog" }
+);
+
 const ActionDialog: React.FC<ActionDialogProps> = props => {
-  const { children, open, title, onClose, variant, maxWidth, ...rest } = props;
+  const {
+    children,
+    open,
+    title,
+    onClose,
+    variant,
+    maxWidth,
+    restrictScroll,
+    ...rest
+  } = props;
+  const classes = useStyles();
 
   return (
-    <Dialog fullWidth onClose={onClose} open={open} maxWidth={maxWidth}>
+    <Dialog
+      fullWidth
+      onClose={onClose}
+      open={open}
+      maxWidth={maxWidth}
+      className={restrictScroll && classes.root}
+    >
       <DialogTitle>{title}</DialogTitle>
-      <DialogContent>{children}</DialogContent>
+      <DialogContent className={restrictScroll && classes.content}>
+        {children}
+      </DialogContent>
       <DialogButtons {...rest} onClose={onClose} variant={variant} />
     </Dialog>
   );

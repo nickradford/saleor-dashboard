@@ -132,6 +132,7 @@ const GiftCardResendCodeDialog: React.FC<DialogActionHandlersProps> = ({
       title={intl.formatMessage(messages.title)}
       confirmButtonState={status}
       disabled={loading}
+      restrictScroll
     >
       {loadingChannels ? (
         <div className={progressClasses.progressContainer}>
