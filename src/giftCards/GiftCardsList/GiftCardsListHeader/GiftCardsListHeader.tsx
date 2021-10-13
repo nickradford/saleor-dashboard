@@ -17,7 +17,7 @@ const GiftCardsListHeader: React.FC = () => {
   const intl = useIntl();
   const navigate = useNavigator();
 
-  const { openCreateDialog } = useGiftCardListDialogs();
+  const { openCreateDialog, openExportDialog } = useGiftCardListDialogs();
 
   const openSettings = () => navigate(giftCardSettingsUrl);
 
@@ -26,17 +26,17 @@ const GiftCardsListHeader: React.FC = () => {
       label: intl.formatMessage(messages.settings),
       testId: "settingsMenuItem",
       onSelect: openSettings
-    }
+    },
     //   {
     //     label: intl.formatMessage(messages.bulkIssue),
     //     testId: "bulkIssueMenuItem"
     //     //   onSelect:
     //   },
-    //   {
-    //     label: intl.formatMessage(messages.exportCodes),
-    //     testId: "exportCodesMenuItem"
-    //     //   onSelect:
-    //   }
+    {
+      label: intl.formatMessage(messages.exportCodes),
+      testId: "exportCodesMenuItem",
+      onSelect: openExportDialog
+    }
   ];
 
   return (

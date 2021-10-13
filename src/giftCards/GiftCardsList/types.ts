@@ -9,7 +9,8 @@ export type GiftCardListColummns =
 
 export enum GiftCardListActionParamsEnum {
   CREATE = "gift-card-create",
-  DELETE = "gift-card-delete"
+  DELETE = "gift-card-delete",
+  EXPORT = "gift-card-export"
 }
 
 export type GiftCardListUrlQueryParams = Pagination &

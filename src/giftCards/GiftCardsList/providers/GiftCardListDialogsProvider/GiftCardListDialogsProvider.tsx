@@ -1,5 +1,6 @@
 import GiftCardListPageDeleteDialog from "@saleor/giftCards/components/GiftCardDeleteDialog/GiftCardListPageDeleteDialog";
 import GiftCardCreateDialog from "@saleor/giftCards/GiftCardCreateDialog";
+import GiftCardExportDialog from "@saleor/giftCards/GiftCardExportDialog";
 import { giftCardsListUrl } from "@saleor/giftCards/urls";
 import useNavigator from "@saleor/hooks/useNavigator";
 import createDialogActionHandlers from "@saleor/utils/handlers/dialogActionHandlers";
@@ -18,6 +19,7 @@ interface GiftCardListDialogsProviderProps {
 export interface GiftCardListDialogsConsumerProps {
   openCreateDialog: () => void;
   openDeleteDialog: (id?: string | React.MouseEvent) => void;
+  openExportDialog: () => void;
   closeDialog: () => void;
   id: string;
 }
@@ -34,19 +36,18 @@ const GiftCardListDialogsProvider: React.FC<GiftCardListDialogsProviderProps> = 
 
   const id = params?.id;
 
+  const { CREATE, DELETE, EXPORT } = GiftCardListActionParamsEnum;
+
   const [openDialog, closeDialog] = createDialogActionHandlers<
     GiftCardListActionParamsEnum,
     GiftCardListUrlQueryParams
   >(navigate, giftCardsListUrl, params);
 
-  const openCreateDialog = () =>
-    openDialog(GiftCardListActionParamsEnum.CREATE);
+  const handleOpenDialog = (type: GiftCardListActionParamsEnum) => () =>
+    openDialog(type);
 
-  const isCreateDialogOpen =
-    params?.action === GiftCardListActionParamsEnum.CREATE;
-
-  const isDeleteDialogOpen =
-    params?.action === GiftCardListActionParamsEnum.DELETE;
+  const isDialogOpen = (type: GiftCardListActionParamsEnum) =>
+    params?.action === type;
 
   const handleDeleteDialogOpen = (id?: string) => {
     openDialog(
@@ -56,7 +57,8 @@ const GiftCardListDialogsProvider: React.FC<GiftCardListDialogsProviderProps> = 
   };
 
   const providerValues: GiftCardListDialogsConsumerProps = {
-    openCreateDialog,
+    openCreateDialog: handleOpenDialog(CREATE),
+    openExportDialog: handleOpenDialog(EXPORT),
     openDeleteDialog: handleDeleteDialogOpen,
     closeDialog,
     id
@@ -66,11 +68,15 @@ const GiftCardListDialogsProvider: React.FC<GiftCardListDialogsProviderProps> = 
     <GiftCardListDialogsContext.Provider value={providerValues}>
       {children}
       <GiftCardCreateDialog
-        open={isCreateDialogOpen}
+        open={isDialogOpen(CREATE)}
         closeDialog={closeDialog}
       />
       <GiftCardListPageDeleteDialog
-        open={isDeleteDialogOpen}
+        open={isDialogOpen(DELETE)}
+        closeDialog={closeDialog}
+      />
+      <GiftCardExportDialog
+        open={isDialogOpen(EXPORT)}
         closeDialog={closeDialog}
       />
     </GiftCardListDialogsContext.Provider>
